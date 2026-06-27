@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — Dico québécois</title>
+  <meta name="description" content="About Dico québécois — a community-built Quebec French dictionary.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="dico_qc_grid.css">
+
+  <style>
+    .about-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem 5rem;
+    }
+
+    .about-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .about-title {
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .about-title em {
+      font-style: italic;
+      color: var(--color-accent);
+      font-weight: 500;
+    }
+
+    .about-lead {
+      font-size: 17px;
+      color: var(--color-text-secondary);
+      line-height: 1.7;
+      margin-bottom: 3rem;
+      border-left: 2px solid var(--color-accent);
+      padding-left: 1.25rem;
+    }
+
+    .about-section {
+      margin-bottom: 2.5rem;
+    }
+
+    .about-section h2 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: var(--color-text-primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .about-section h2 i {
+      color: var(--color-accent);
+      font-size: 20px;
+    }
+
+    .about-section p {
+      font-size: 15px;
+      color: var(--color-text-secondary);
+      line-height: 1.75;
+    }
+
+    .about-section p + p {
+      margin-top: 0.75rem;
+    }
+
+    .about-divider {
+      border: none;
+      border-top: 1px solid var(--color-border-primary);
+      margin: 3rem 0;
+    }
+
+    .feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 0.5rem;
+    }
+
+    .feature-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 15px;
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+    }
+
+    .feature-list li i {
+      color: var(--color-accent);
+      font-size: 18px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* Feedback form */
+    .feedback-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--color-border-secondary);
+      border-radius: var(--border-radius-lg);
+      padding: 2rem;
+      backdrop-filter: blur(16px);
+    }
+
+    .feedback-panel h2 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .feedback-panel h2 i { color: var(--color-accent); font-size: 20px; }
+
+    .feedback-panel p {
+      font-size: 14px;
+      color: var(--color-text-tertiary);
+      margin-bottom: 1.5rem;
+    }
+
+    .feedback-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .fb-label {
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    .feedback-success {
+      display: none;
+      text-align: center;
+      padding: 1.5rem;
+      color: var(--color-accent);
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .feedback-success i { font-size: 32px; display: block; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">
+      <span class="nav-logo">Dico <em>québécois</em></span>
+      <span class="nav-tagline">Community-built Quebec French dictionary</span>
+    </a>
+    <button class="nav-toggle" onclick="toggleMobileNav()" aria-label="Toggle menu">
+      <i class="ti ti-menu-2" aria-hidden="true"></i>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="/index.html" class="nav-link">Home</a></li>
+      <li><a href="/about.html" class="nav-link active">About</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="about-wrap">
+
+  <div class="about-eyebrow">About the project</div>
+  <h1 class="about-title">Built for people who can read French<br>but can't understand a word Québécois say</h1>
+  <p class="about-lead">
+    Standard French and Quebec French are two very different things the moment someone opens their mouth.
+    This site exists to bridge that gap — a community-built reference for the contractions, slang, sacré expressions,
+    and joual that textbooks never cover.
+  </p>
+
+  <div class="about-section">
+    <h2><i class="ti ti-map-pin" aria-hidden="true"></i> Why this exists</h2>
+    <p>
+      Moving to Quebec and understanding written French is one thing. Sitting across from a local at a dep and
+      understanding "Chu tanné d'attendre, ostie" is a completely different skill. This project started as a personal
+      vocabulary dump and grew into a shared resource.
+    </p>
+    <p>
+      If you've ever nodded along to a conversation in Montreal while understanding maybe 40% of it — this is for you.
+    </p>
+  </div>
+
+  <div class="about-section">
+    <h2><i class="ti ti-list-check" aria-hidden="true"></i> What you'll find here</h2>
+    <ul class="feature-list">
+      <li><i class="ti ti-circle-check" aria-hidden="true"></i> Quebec French slang, contractions, and expressions not found in standard dictionaries</li>
+      <li><i class="ti ti-circle-check" aria-hidden="true"></i> Pronunciation tips written in plain English — no IPA required</li>
+      <li><i class="ti ti-circle-check" aria-hidden="true"></i> Real usage examples from everyday Quebec speech</li>
+      <li><i class="ti ti-circle-check" aria-hidden="true"></i> Origins for contractions (e.g. "Chu" = Je suis)</li>
+      <li><i class="ti ti-circle-check" aria-hidden="true"></i> Community-added entries — anyone can contribute</li>
+    </ul>
+  </div>
+
+  <div class="about-section">
+    <h2><i class="ti ti-code" aria-hidden="true"></i> Built by</h2>
+    <p>
+      This project was built by <a href="https://swayam-patel.github.io/swayam-patel/" target="_blank" rel="noopener" style="color:var(--color-accent);text-decoration:none;font-weight:600;">Swayam</a>,
+      a CS student at Concordia University living the exact problem this site solves.
+      It's open, community-driven, and always a work in progress — just like learning French.
+    </p>
+  </div>
+
+  <hr class="about-divider">
+
+  <!-- FEEDBACK FORM -->
+  <div class="feedback-panel">
+    <h2><i class="ti ti-message-circle" aria-hidden="true"></i> Report or suggest something</h2>
+    <p>Found a wrong definition? Have a word to suggest? Something broken? Let us know.</p>
+
+    <div class="feedback-fields" id="feedback-fields">
+      <div>
+        <div class="fb-label">Type</div>
+        <div class="select-wrap">
+          <select id="fb-type" class="placeholder" onchange="this.classList.toggle('placeholder', !this.value)">
+            <option value="" disabled selected>Select a type</option>
+            <option value="wrong">Wrong or inaccurate entry</option>
+            <option value="suggest">Suggest a new word</option>
+            <option value="bug">Something is broken</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <div class="fb-label">Your message</div>
+        <textarea id="fb-message" style="min-height:120px;" placeholder="Describe the issue or suggestion…"></textarea>
+      </div>
+      <div>
+        <div class="fb-label">Your name or email (optional)</div>
+        <input type="text" id="fb-contact" placeholder="So we can follow up if needed">
+      </div>
+      <div class="fa-row" style="margin-top:0;">
+        <span class="err" id="fb-err"></span>
+        <div class="fa-btns">
+          <button class="btn-submit" onclick="submitFeedback()">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="feedback-success" id="feedback-success">
+      <i class="ti ti-circle-check" aria-hidden="true"></i>
+      Merci! Your message was received.
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-left">
+      <span class="footer-brand">Dico <em>québécois</em></span>
+      <span class="footer-copy">© <span id="footer-year"></span> All rights reserved.</span>
+    </div>
+    <div class="footer-right">
+      <span class="footer-credit">
+        Built by <a href="https://swayam-patel.github.io/swayam-patel/" target="_blank" rel="noopener" class="footer-link">Swayam</a>
+      </span>
+      <span class="footer-divider">·</span>
+      <span class="footer-note">Tabarnak, on apprend ensemble 🍁</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+  function toggleMobileNav() {
+    document.getElementById('nav-links').classList.toggle('open');
+  }
+
+  function submitFeedback() {
+    var type    = document.getElementById('fb-type').value;
+    var message = document.getElementById('fb-message').value.trim();
+    var err     = document.getElementById('fb-err');
+
+    if (!type || !message) {
+      err.textContent = 'Please select a type and write a message.';
+      return;
+    }
+    err.textContent = '';
+
+    // TODO: wire to FastAPI endpoint POST /feedback
+    document.getElementById('feedback-fields').style.display = 'none';
+    document.getElementById('feedback-success').style.display = 'block';
+  }
+</script>
+</body>
+</html>

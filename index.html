@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dico québécois — Quebec French Dictionary</title>
+  <meta name="description" content="Explore Quebec French vocabulary, slang, pronunciation tips, and examples, built by the community.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="dico_qc_grid.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">
+      <span class="nav-logo">Dico <em>québécois</em></span>
+      <span class="nav-tagline">Community-built Quebec French dictionary</span>
+    </a>
+    <button class="nav-toggle" onclick="toggleMobileNav()" aria-label="Toggle menu">
+      <i class="ti ti-menu-2" aria-hidden="true"></i>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="/" class="nav-link active">Home</a></li>
+      <li><a href="/about.html" class="nav-link">About</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="app">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">Quebec French · Community built</div>
+    <h1 class="hero-title">Dico <em>québécois</em></h1>
+    <p class="hero-sub">Words, slang, and sounds from the people who actually speak it.</p>
+  </div>
+
+  <!-- CONTROLS: filter pills + layout switcher -->
+  <div class="controls-header">
+    <div class="filter-bar">
+      <button class="filter-pill active" data-cat="all" onclick="setFilter('all')">
+        All <span class="pill-count" id="pill-count-all">0</span>
+      </button>
+      <button class="filter-pill" data-cat="verb" onclick="setFilter('verb')">
+        Verb <span class="pill-count" id="pill-count-verb">0</span>
+      </button>
+      <button class="filter-pill" data-cat="noun" onclick="setFilter('noun')">
+        Noun <span class="pill-count" id="pill-count-noun">0</span>
+      </button>
+      <button class="filter-pill" data-cat="adjective" onclick="setFilter('adjective')">
+        Adjective <span class="pill-count" id="pill-count-adjective">0</span>
+      </button>
+      <button class="filter-pill" data-cat="adverb" onclick="setFilter('adverb')">
+        Adverb <span class="pill-count" id="pill-count-adverb">0</span>
+      </button>
+      <button class="filter-pill" data-cat="phrase" onclick="setFilter('phrase')">
+        Phrase <span class="pill-count" id="pill-count-phrase">0</span>
+      </button>
+      <button class="filter-pill" data-cat="expression" onclick="setFilter('expression')">
+        Expression <span class="pill-count" id="pill-count-expression">0</span>
+      </button>
+      <button class="filter-pill" data-cat="slang" onclick="setFilter('slang')">
+        Slang <span class="pill-count" id="pill-count-slang">0</span>
+      </button>
+    </div>
+
+    <div class="layout-switcher">
+      <button class="btn-layout active" id="btn-layout-grid" onclick="switchLayout('grid')" aria-label="Grid view">
+        <i class="ti ti-layout-grid" aria-hidden="true"></i>
+      </button>
+      <button class="btn-layout" id="btn-layout-list" onclick="switchLayout('list')" aria-label="List view">
+        <i class="ti ti-layout-list" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- SEARCH + ADD -->
+  <div class="search-add-row">
+    <div class="search-wrap">
+      <i class="ti ti-search" aria-hidden="true"></i>
+      <input type="text" id="entries-search" placeholder="Search words, meanings, pronunciations…" oninput="renderEntries()">
+    </div>
+    <button class="btn-add" onclick="toggleForm('entry-form')">
+      <i class="ti ti-plus" aria-hidden="true" style="font-size:15px;"></i> Add entry
+    </button>
+  </div>
+
+  <!-- UNIFIED FORM -->
+  <div class="form-panel" id="entry-form">
+    <div class="form-title"><i class="ti ti-forms" aria-hidden="true"></i> New entry</div>
+    <div class="fg">
+
+      <div>
+        <div class="fl">French word / phrase <span>*</span></div>
+        <input type="text" id="e-word" placeholder="e.g. Parler, Chu, C'est le boutte">
+      </div>
+
+      <div>
+        <div class="fl">Category <span>*</span></div>
+        <div class="select-wrap">
+          <select id="e-cat" class="placeholder" onchange="this.classList.toggle('placeholder', !this.value)">
+            <option value="" disabled selected>Select a category</option>
+            <option value="verb">Verb</option>
+            <option value="noun">Noun</option>
+            <option value="adjective">Adjective</option>
+            <option value="adverb">Adverb</option>
+            <option value="phrase">Phrase</option>
+            <option value="expression">Expression</option>
+            <option value="slang">Slang</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <div class="fl">English meaning <span>*</span></div>
+        <input type="text" id="e-en" placeholder="e.g. To speak, I am, It's awesome">
+      </div>
+
+      <div>
+        <div class="fl">Short for (origin)</div>
+        <input type="text" id="e-origin" placeholder="e.g. Je suis — leave blank if not a contraction">
+      </div>
+
+      <div class="fw">
+        <div class="fl">Pronunciation tip</div>
+        <input type="text" id="e-phon" placeholder="e.g. shoo — rhymes with 'shoe', the je becomes chu">
+      </div>
+
+      <div class="fw">
+        <div class="fl">Example sentence</div>
+        <textarea id="e-ex" placeholder="e.g. Chu fatigué. (I'm tired.)"></textarea>
+      </div>
+
+      <div>
+        <div class="fl">Imgur gif / image link <span style="color:var(--color-text-tertiary);font-weight:400;">(optional)</span></div>
+        <input type="text" id="e-img" placeholder="https://i.imgur.com/..." oninput="previewImg()">
+        <div id="e-img-warn" style="font-size:12px;margin-top:5px;"></div>
+        <div class="img-preview" id="e-preview"><img id="e-preview-img" src="" alt="preview"></div>
+      </div>
+
+      <div class="fw" id="e-copyright-wrap" style="display:flex;align-items:flex-start;gap:10px;margin-top:4px;">
+        <input type="checkbox" id="e-copyright" style="width:auto;margin-top:3px;accent-color:var(--color-accent);flex-shrink:0;">
+        <label for="e-copyright" style="font-size:13px;color:var(--color-text-tertiary);cursor:pointer;line-height:1.5;">
+          I confirm this image is free to use and not copyrighted material. I take responsibility for this submission.
+        </label>
+      </div>
+
+      <!--
+      <div>
+        <div class="fl">YouTube audio link <span style="color:var(--color-text-tertiary);font-weight:400;">(optional)</span></div>
+        <input type="text" id="e-audio" placeholder="https://youtube.com/...">
+      </div>
+      -->
+
+      <div>
+        <div class="fl">Your name</div>
+        <input type="text" id="e-name" placeholder="Anonymous">
+      </div>
+
+    </div>
+    <div class="fa-row">
+      <span class="err" id="e-err"></span>
+      <div class="fa-btns">
+        <button class="btn-cancel" onclick="toggleForm('entry-form')">Cancel</button>
+        <button class="btn-submit" onclick="submitEntry()">Add entry</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ENTRIES GRID -->
+  <div class="grid" id="entries-grid"></div>
+  <div class="empty-state" id="empty-state-msg" style="display:none;">
+    <i class="ti ti-mood-empty" aria-hidden="true"></i>
+    <p>No entries found — try a different filter or add one!</p>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-left">
+      <span class="footer-brand">Dico <em>québécois</em></span>
+      <span class="footer-copy">© <span id="footer-year"></span> All rights reserved.</span>
+    </div>
+    <div class="footer-right">
+      <span class="footer-credit">
+        Built by
+        <a href="https://swayam-patel.github.io/swayam-patel/" target="_blank" rel="noopener" class="footer-link">Swayam</a>
+      </span>
+      <span class="footer-divider">·</span>
+      <span class="footer-note">Tabarnak, on apprend ensemble 🍁</span>
+    </div>
+  </div>
+</footer>
+
+<script src="dico_qc_grid.js" defer></script>
+<script>
+  document.getElementById('footer-year').textContent = new Date().getFullYear();
+  function toggleMobileNav() {
+    document.getElementById('nav-links').classList.toggle('open');
+  }
+</script>
+</body>
+</html>
