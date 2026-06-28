@@ -2,7 +2,7 @@
    API
    Change this to your Render URL when deployed.
    ============================================================ */
-var API = "https://dico-quebecois-api.onrender.com";
+var API = "https://dico-quebecois-api.vercel.app";
 
 /* ============================================================
    DATA
