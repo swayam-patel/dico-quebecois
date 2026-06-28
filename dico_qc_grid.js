@@ -2,7 +2,7 @@
    API
    Change this to your Render URL when deployed.
    ============================================================ */
-var API = "http://localhost:8000";
+var API = "https://dico-quebecois-api.onrender.com";
 
 /* ============================================================
    DATA
