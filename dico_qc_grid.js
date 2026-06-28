@@ -82,15 +82,33 @@ function setFilter(cat) {
   renderEntries();
 }
 
+function toggleCard(el) {
+  el.classList.toggle('expanded');
+}
+
+// Called by img onload to rebalance columns after image heights are known
+function rebalance(gridId) {
+  renderEntries();
+}
+
+// Re-render on resize so column count updates
+var resizeTimer;
+window.addEventListener('resize', function() {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(renderEntries, 150);
+});
+
 /* ============================================================
    LAYOUT TOGGLE
    ============================================================ */
+/* Layout switcher — commented out for now
 function switchLayout(layout) {
   currentLayout = layout;
   document.querySelectorAll('.btn-layout').forEach(function(b) { b.classList.remove('active'); });
   document.getElementById('btn-layout-' + layout).classList.add('active');
   renderEntries();
 }
+*/
 
 /* ============================================================
    FORM
@@ -138,6 +156,13 @@ function updatePillCounts() {
 /* ============================================================
    RENDER
    ============================================================ */
+function getColCount() {
+  var w = window.innerWidth;
+  if (w <= 600)  return 2;
+  if (w <= 1024) return 3;
+  return 4;
+}
+
 function renderEntries() {
   var q = (document.getElementById('entries-search').value || '').trim().toLowerCase();
 
@@ -155,8 +180,6 @@ function renderEntries() {
   updatePillCounts();
 
   var el = document.getElementById('entries-grid');
-  el.classList.toggle('list-view', currentLayout === 'list');
-
   var emptyMsg = document.getElementById('empty-state-msg');
 
   if (!list.length) {
@@ -167,29 +190,56 @@ function renderEntries() {
 
   emptyMsg.style.display = 'none';
 
-  el.innerHTML = list.slice().reverse().map(function(e) {
+  // Build column divs
+  var cols = getColCount();
+  var colEls = [];
+  var colHTML = '';
+  var i;
+  for (i = 0; i < cols; i++) {
+    colHTML += '<div class="grid-col" id="grid-col-' + i + '"></div>';
+  }
+  el.innerHTML = colHTML;
+  for (i = 0; i < cols; i++) {
+    colEls.push(document.getElementById('grid-col-' + i));
+  }
+
+  // Place cards left-to-right into shortest column
+  list.slice().reverse().forEach(function(e, idx) {
     var m = CATEGORY_META[e.category] || { label: e.category, bg: 'rgba(255,255,255,0.08)', text: '#9CA3AF' };
-    return '<div class="ecard">' +
-      (e.img ? '<img class="ecard-img" src="' + escHtml(e.img) + '" alt="' + escHtml(e.word) + '" style="max-width:100%;height:auto;">' : '') +
-      '<div class="ecard-body">' +
-        '<div class="ecard-header">' +
-          '<div class="ecard-word">' + escHtml(e.word) + '</div>' +
-          '<span class="ecard-cat" style="background:' + m.bg + ';color:' + m.text + ';">' + m.label + '</span>' +
+    var card = document.createElement('div');
+    card.className = 'ecard-wrap';
+    card.innerHTML =
+      '<div class="ecard" onclick="toggleCard(this, \'' + el.id + '\')">' +
+        (e.img ? '<img class="ecard-img" src="' + escHtml(e.img) + '" alt="' + escHtml(e.word) + '" onload="rebalance(\'' + el.id + '\')">' : '') +
+        '<div class="ecard-peek">' +
+          '<div class="ecard-peek-left">' +
+            '<div class="ecard-word">' + escHtml(e.word) + '</div>' +
+            '<div class="ecard-en">' + escHtml(e.en) + '</div>' +
+          '</div>' +
+          '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">' +
+            '<span class="ecard-cat" style="background:' + m.bg + ';color:' + m.text + ';">' + m.label + '</span>' +
+            '<i class="ti ti-chevron-down ecard-chevron" aria-hidden="true"></i>' +
+          '</div>' +
         '</div>' +
-        (e.origin ? '<div class="ecard-origin">short for <strong>' + escHtml(e.origin) + '</strong></div>' : '') +
-        '<div class="ecard-en">' + escHtml(e.en) + '</div>' +
-        (e.phon ? '<span class="ecard-phon">' + escHtml(e.phon) + '</span>' : '') +
-        (e.ex   ? '<div class="ecard-ex">' + escHtml(e.ex) + '</div>' : '') +
-        /* audio placeholder — uncomment when backend ready
-        (e.audio ? '<a class="ecard-audio" href="' + escHtml(e.audio) + '" target="_blank" rel="noopener"><i class="ti ti-player-play"></i> Listen</a>' : '') +
-        */
-        '<div class="ecard-foot">' +
-          '<span class="ecard-by">' + escHtml(e.by) + '</span>' +
-          '<span class="ecard-time">' + timeAgo(e.created_at || e.ts) + '</span>' +
+        '<div class="ecard-details">' +
+          '<div class="ecard-body">' +
+            (e.origin ? '<div class="ecard-origin">short for <strong>' + escHtml(e.origin) + '</strong></div>' : '') +
+            (e.phon ? '<span class="ecard-phon">' + escHtml(e.phon) + '</span>' : '') +
+            (e.ex   ? '<div class="ecard-ex">' + escHtml(e.ex) + '</div>' : '') +
+            '<div class="ecard-foot">' +
+              '<span class="ecard-by">' + escHtml(e.by) + '</span>' +
+              '<span class="ecard-time">' + timeAgo(e.created_at || e.ts) + '</span>' +
+            '</div>' +
+          '</div>' +
         '</div>' +
-      '</div>' +
-    '</div>';
-  }).join('');
+      '</div>';
+
+    // Find shortest column by scrollHeight
+    var shortest = colEls.reduce(function(min, col) {
+      return col.scrollHeight < min.scrollHeight ? col : min;
+    });
+    shortest.appendChild(card);
+  });
 }
 
 /* ============================================================

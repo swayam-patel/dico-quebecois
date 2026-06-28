@@ -421,11 +421,25 @@ textarea { resize: vertical; min-height: 80px; }
 .btn-submit:hover { background: var(--color-accent-hover); }
 
 /* ==========================================================================
-   MASONRY GRID (CSS columns)
+   MASONRY GRID (JS-driven left-to-right)
    ========================================================================== */
 .grid {
-  columns: 4 220px;
-  column-gap: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+}
+
+.grid-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.ecard-wrap {
+  width: 100%;
 }
 
 /* ==========================================================================
@@ -441,15 +455,53 @@ textarea { resize: vertical; min-height: 80px; }
   transition: var(--transition-spring);
   backdrop-filter: blur(12px);
   box-shadow: var(--shadow-sm);
-  break-inside: avoid;
-  margin-bottom: 20px;
+  cursor: pointer;
+  width: 100%;
 }
 
 .ecard:hover {
   background: var(--bg-card-hover);
-  transform: translateY(-6px);
   border-color: rgba(16, 185, 129, 0.2);
   box-shadow: var(--shadow-md), 0 10px 20px rgba(16, 185, 129, 0.07);
+}
+
+/* Collapsed state — only word + gif visible */
+.ecard-details {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+/* Expanded state */
+.ecard.expanded .ecard-details {
+  max-height: 500px;
+}
+
+/* Expand indicator */
+.ecard-peek {
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.ecard-peek-left {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.ecard-chevron {
+  font-size: 16px;
+  color: var(--color-text-tertiary);
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.ecard.expanded .ecard-chevron {
+  transform: rotate(180deg);
 }
 
 .ecard-img {
@@ -461,22 +513,17 @@ textarea { resize: vertical; min-height: 80px; }
 }
 
 .ecard-body {
-  padding: 1.25rem;
+  padding: 10px 12px;
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 5px;
 }
 
-.ecard-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 10px;
-}
+/* ecard-header removed — replaced by ecard-peek */
 
 .ecard-word {
-  font-size: 22px;
+  font-size: 17px;
   font-weight: 700;
   color: var(--color-text-primary);
   letter-spacing: -0.01em;
@@ -485,19 +532,19 @@ textarea { resize: vertical; min-height: 80px; }
 
 /* Category badge — colors injected inline from JS */
 .ecard-cat {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
-  padding: 3px 10px;
+  padding: 2px 8px;
   border-radius: 99px;
   white-space: nowrap;
   flex-shrink: 0;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  margin-top: 4px;
+  margin-top: 3px;
 }
 
 .ecard-origin {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--color-text-tertiary);
 }
 
@@ -507,30 +554,34 @@ textarea { resize: vertical; min-height: 80px; }
 }
 
 .ecard-en {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--color-text-secondary);
   font-weight: 500;
 }
 
 .ecard-phon {
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 11px;
   background: rgba(255, 255, 255, 0.04);
-  padding: 5px 10px;
+  padding: 3px 8px;
   border-radius: 6px;
   color: var(--color-text-secondary);
   align-self: flex-start;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .ecard-ex {
-  font-size: 13px;
-  color: var(--color-text-secondary);
+  font-size: 12px;
+  color: var(--color-text-tertiary);
   font-style: italic;
-  line-height: 1.6;
-  flex: 1;
-  border-left: 2px solid rgba(255, 255, 255, 0.1);
-  padding-left: 10px;
-  margin-top: 2px;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .ecard-audio {
@@ -553,17 +604,17 @@ textarea { resize: vertical; min-height: 80px; }
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 0.75rem;
-  padding-top: 0.75rem;
+  margin-top: 6px;
+  padding-top: 6px;
   border-top: 1px solid var(--color-border-primary);
 }
 
 .ecard-by {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
   background: rgba(255, 255, 255, 0.06);
   color: var(--color-text-secondary);
-  padding: 3px 10px;
+  padding: 2px 8px;
   border-radius: 99px;
 }
 
@@ -809,14 +860,33 @@ textarea { resize: vertical; min-height: 80px; }
 /* ==========================================================================
    RESPONSIVE
    ========================================================================== */
+
+/* Tablet — 3 columns, smaller images */
+@media (max-width: 1024px) and (min-width: 601px) {
+  .grid { columns: 3 140px; column-gap: 10px; }
+  .ecard-wrap { margin-bottom: 10px; }
+  .ecard-img { max-height: 110px; }
+  .ecard-word { font-size: 14px; }
+  .ecard-en { font-size: 11px; }
+  .ecard-peek { padding: 8px 10px; }
+}
+
+/* Mobile — 2 columns, compact cards */
+@media (max-width: 600px) {
+  .grid { columns: 2 130px; column-gap: 8px; }
+  .ecard-wrap { margin-bottom: 8px; }
+  .ecard-img { max-height: 90px; }
+  .ecard-word { font-size: 13px; }
+  .ecard-en { font-size: 11px; }
+  .ecard-peek { padding: 7px 9px; gap: 4px; }
+  .ecard-chevron { font-size: 13px; }
+  .ecard-cat { font-size: 9px; padding: 2px 6px; }
+}
+
 @media (max-width: 768px) {
   .hero-title { font-size: 32px; }
   .fg { grid-template-columns: 1fr; }
   .controls-header { flex-direction: column; align-items: flex-start; }
-  .grid { columns: 2 140px; }
-  .grid.list-view { columns: 1; }
-  .grid.list-view .ecard { flex-direction: column; }
-  .grid.list-view .ecard-img { width: 100%; height: 160px; border-right: none; border-bottom: 1px solid var(--color-border-primary); }
 
   .nav-toggle { display: flex; }
   .nav-links {
